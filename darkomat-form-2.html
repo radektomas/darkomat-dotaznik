@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DARK🎁MAT — Dotazník</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F5F0EB;
+      --card: #FFFFFF;
+      --accent: #D4567A;
+      --accent-light: #FAF0F3;
+      --accent-dark: #B03D62;
+      --text: #1A1714;
+      --muted: #8C7E78;
+      --border: #E2DAD4;
+      --border-active: #D4567A;
+      --radius: 6px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .nav-logo .gift { font-size: 18px; }
+
+    .nav-btns { display: flex; gap: 10px; }
+
+    .btn-outline {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-fill {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 4px;
+      background: var(--accent);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-fill:hover { background: var(--accent-dark); }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 64px 20px 56px;
+    }
+
+    .hero-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 10vw, 80px);
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .hero-logo .gift-big { font-size: 0.85em; }
+
+    .hero-sub-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .hero-sub-label::before,
+    .hero-sub-label::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--muted);
+      opacity: 0.5;
+    }
+
+    .hero h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .hero h1 strong {
+      font-weight: 700;
+      color: var(--text);
+      display: block;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    /* MAIN */
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px 100px;
+    }
+
+    /* PROGRESS */
+    .progress-wrap {
+      margin-bottom: 48px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+    }
+
+    /* SECTION */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 24px;
+      margin-top: 48px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 16px;
+      background: var(--accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* QUESTION BLOCK */
+    .q-block {
+      margin-bottom: 36px;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .q-block:nth-child(1)  { animation-delay: .04s }
+    .q-block:nth-child(2)  { animation-delay: .08s }
+    .q-block:nth-child(3)  { animation-delay: .12s }
+    .q-block:nth-child(4)  { animation-delay: .16s }
+    .q-block:nth-child(5)  { animation-delay: .20s }
+    .q-block:nth-child(6)  { animation-delay: .24s }
+    .q-block:nth-child(7)  { animation-delay: .28s }
+    .q-block:nth-child(8)  { animation-delay: .32s }
+
+    .q-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 14px;
+      line-height: 1.45;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .q-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .q-note {
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* PILL OPTIONS (tags like on the site) */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 18px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      position: relative;
+    }
+
+    .pill input {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+
+    .pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .pill.selected {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+
+    /* Other input */
+    .other-input {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .other-input input {
+      width: 100%;
+      padding: 11px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .other-input input:focus { border-color: var(--accent); }
+    .other-input input::placeholder { color: var(--muted); }
+
+    /* SUBMIT */
+    .error-msg {
+      display: none;
+      font-size: 13px;
+      color: #B91C1C;
+      padding: 10px 14px;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.2s;
+      margin-top: 16px;
+    }
+
+    .submit-btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(212, 86, 122, 0.3);
+    }
+
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* DIVIDER */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 8px 0 0;
+    }
+
+    /* SUCCESS */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .success-icon { font-size: 64px; display: block; margin-bottom: 20px; }
+
+    .success-screen h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .success-screen p { color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+    footer {
+      text-align: center;
+      padding: 32px 0 20px;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0.55;
+    }
+
+    @media (max-width: 500px) {
+      nav { padding: 16px 20px; }
+      .hero { padding: 48px 20px 40px; }
+      .pill { padding: 8px 14px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">DARK<span class="gift">🎁</span>MAT</div>
+  <div class="nav-btns">
+    <button class="btn-outline">Přihlásit se</button>
+    <button class="btn-fill">Registrovat</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-logo">DARK<span class="gift-big">🎁</span>MAT</div>
+  <div class="hero-sub-label">Výzkumný dotazník</div>
+  <h1>Pomozte nám najít dárek,<strong>který překvapí.</strong></h1>
+  <p>3 minuty · 8 otázek · Anonymní odpovědi</p>
+</div>
+
+<main>
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="progress-label">0 z 8 vyplněno</span>
+      <span id="progress-pct">0 %</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+  </div>
+
+  <form id="survey-form">
+
+    <div class="section-label">Nákupní chování</div>
+
+    <!-- Q1 -->
+    <div class="q-block">
+      <div class="q-label"><span class="q-num">01</span> Jak často nakupujete dárky přes internet?</div>
+      <div class="pills" id="pills-q1" data-name="q1" data-type="radio">
+        <label class="pill"><input type="radio" name="q1" value="Méně než 2× ročně"><span>Méně než 2× ročně</span></label>
+        <label class="pill"><input type="radio" name="q1" value="3–5× ročně"><span>3–5× ročně</span></label>
+        <label class="pill"><input type="radio" name="q1" value="6× a vícekrát ročně"><span>6× a vícekrát ročně</span></label>
+        <label class="pill jine-pill"><input type="radio" name="q1" value="jine_q1"><span>Jiné</span></label>
+      </div>
+      <div class="other-input" id="other-q1"><input type="text" name="q1_other" placeholder="Uveďte prosím…"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-block">
+      <div class="q-label"><span class="q-num">02</span> Jak vnímáte proces výběru vhodného dárku?</div>
+      <div class="pills" data-name="q2" data-type="radio">
+        <label class="pill"><input type="radio" name="q2" value="Velmi snadno, vždy vím co koupit."><span>Velmi snadno</span></label>
+        <label class="pill"><input type="radio" name="q2" value="Spíše snadno, inspiraci hledám průběžně."><span>Spíše snadno</span></label>
+        <label class="pill"><input type="radio" name="q2" value="Spíše obtížně, výběr mě stresuje."><span>Spíše obtížně</span></label>
+        <label class="pill"><input type="radio" name="q2" value="Velmi obtížně, je to vyčerpávající."><span>Velmi obtížně</span></label>
+        <label class="pill"><input type="radio" name="q2" value="jine_q2"><span>Jiné</span></label>
+      </div>
+      <div class="other-input" id="other-q2"><input type="text" name="q2_other" placeholder="Uveďte prosím…"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-block">
+      <div class="q-label"><span class="q-num">03</span> Kolik času průměrně strávíte hledáním jednoho dárku?</div>
+      <div class="pills" data-name="q3" data-type="radio">
+        <label class="pill"><input type="radio" name="q3" value="Do 30 minut"><span>Do 30 minut</span></label>
+        <label class="pill"><input type="radio" name="q3" value="30–60 minut"><span>30–60 minut</span></label>
+        <label class="pill"><input type="radio" name="q3" value="1–3 hodiny"><span>1–3 hodiny</span></label>
+        <label class="pill"><input type="radio" name="q3" value="Více než 3 hodiny"><span>Více než 3 hodiny</span></label>
+        <label class="pill"><input type="radio" name="q3" value="jine_q3"><span>Jiné</span></label>
+      </div>
+      <div class="other-input" id="other-q3"><input type="text" name="q3_other" placeholder="Uveďte prosím…"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-block">
+      <div class="q-label"><span class="q-num">04</span> Co je pro Vás největší bariérou? <span class="q-note">(více odpovědí)</span></div>
+      <div class="pills" data-name="q4" data-type="checkbox">
+        <label class="pill"><input type="checkbox" name="q4" value="Nedostatek nápadů"><span>Nedostatek nápadů</span></label>
+        <label class="pill"><input type="checkbox" name="q4" value="Příliš mnoho produktů"><span>Příliš mnoho produktů</span></label>
+        <label class="pill"><input type="checkbox" name="q4" value="Obava, že se dárek nebude líbit"><span>Obava z odmítnutí</span></label>
+        <label class="pill"><input type="checkbox" name="q4" value="Časová náročnost"><span>Časová náročnost</span></label>
+        <label class="pill"><input type="checkbox" name="q4" value="Absence filtrů dle osobnosti"><span>Žádné filtry dle osobnosti</span></label>
+        <label class="pill" id="q4-other-pill"><input type="checkbox" name="q4" id="q4-other-check" value="jine_q4"><span>Jiné</span></label>
+      </div>
+      <div class="other-input" id="other-q4"><input type="text" name="q4_other" placeholder="Uveďte prosím…"></div>
+    </div>
+
+    <hr class="section-divider">
+    <div class="section-label">Technologické řešení</div>
+
+    <!-- Q5 -->
+    <div class="q-block">
+      <div class="q-label"><span class="q-num">05</span> Využili byste bezplatnou AI aplikaci, která na základě dotazníku o obdarovaném vygeneruje tipy na dárky?</div>
+      <div class="pills" data-name="q5" data-type="radio">
+        <label class="pill"><input type="radio" name="q5" value="Určitě ano"><span>Určitě ano</span></label>
+        <label class="pill"><input type="radio" name="q5" value="Spíše ano"><span>Spíše ano</span></label>
+        <label class="pill"><input type="radio" name="q5" value="Spíše ne"><span>Spíše ne</span></label>
+        <label class="pill"><input type="radio" name="q5" value="Určitě ne"><span>Určitě ne</span></label>
+        <label class="pill"><input type="radio" name="q5" value="jine_q5"><span>Jiné</span></label>
+      </div>
+      <div class="other-input" id="other-q5"><input type="text" name="q5_other" placeholder="Uveďte prosím…"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-block">
+      <div class="q-label"><span class="q-num">06</span> Jakou vlastnost byste u „dárkového asistenta" ocenili nejvíce?</div>
+      <div class="pills" data-name="q6" data-type="radio">
+        <label class="pill"><input type="radio" name="q6" value="Rychlost a úspora času"><span>Rychlost</span></label>
+        <label class="pill"><input type="radio" name="q6" value="Personalizace na míru"><span>Personalizace</span></label>
+        <label class="pill"><input type="radio" name="q6" value="Výběr z mnoha e-shopů"><span>Nezávislost e-shopů</span></label>
+        <label class="pill"><input type="radio" name="q6" value="Přesný cenový limit"><span>Cenový limit</span></label>
+        <label class="pill"><input type="radio" name="q6" value="jine_q6"><span>Jiné</span></label>
+      </div>
+      <div class="other-input" id="other-q6"><input type="text" name="q6_other" placeholder="Uveďte prosím…"></div>
+    </div>
+
+    <hr class="section-divider">
+    <div class="section-label">Byznys model</div>
+
+    <!-- Q7 -->
+    <div class="q-block">
+      <div class="q-label"><span class="q-num">07</span> Jaký způsob dokončení nákupu byste preferovali?</div>
+      <div class="pills" data-name="q7" data-type="radio">
+        <label class="pill"><input type="radio" name="q7" value="Přesměrování do e-shopu (Alza, Mall…)"><span>Přesměrovat do e-shopu</span></label>
+        <label class="pill"><input type="radio" name="q7" value="Nákup přímo v Dárkomatu"><span>Koupit v Dárkomatu</span></label>
+        <label class="pill"><input type="radio" name="q7" value="Je mi to jedno, rozhoduje cena"><span>Rozhoduje jen cena</span></label>
+        <label class="pill"><input type="radio" name="q7" value="jine_q7"><span>Jiné</span></label>
+      </div>
+      <div class="other-input" id="other-q7"><input type="text" name="q7_other" placeholder="Uveďte prosím…"></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-block">
+      <div class="q-label"><span class="q-num">08</span> Kolik jste ochotni utratit za jeden dárek přes doporučovací aplikaci?</div>
+      <div class="pills" data-name="q8" data-type="radio">
+        <label class="pill"><input type="radio" name="q8" value="Do 500 Kč"><span>Do 500 Kč</span></label>
+        <label class="pill"><input type="radio" name="q8" value="500–1 500 Kč"><span>500–1 500 Kč</span></label>
+        <label class="pill"><input type="radio" name="q8" value="1 501–3 000 Kč"><span>1 501–3 000 Kč</span></label>
+        <label class="pill"><input type="radio" name="q8" value="Více než 3 000 Kč"><span>Více než 3 000 Kč</span></label>
+        <label class="pill"><input type="radio" name="q8" value="jine_q8"><span>Jiné</span></label>
+      </div>
+      <div class="other-input" id="other-q8"><input type="text" name="q8_other" placeholder="Uveďte prosím…"></div>
+    </div>
+
+    <p class="error-msg" id="global-error">⚠ Prosím vyplňte všechny otázky (1–8) před odesláním.</p>
+    <button type="submit" class="submit-btn" id="submit-btn">Odeslat odpovědi</button>
+
+  </form>
+
+  <div class="success-screen" id="success">
+    <span class="success-icon">🎁</span>
+    <h2>Díky!</h2>
+    <p>Vaše odpovědi byly úspěšně odeslány.<br>Pomáháte Dárkomatu stát se lepším.</p>
+  </div>
+
+  <footer>© 2025 DARK🎁MAT · Dárky s příběhem</footer>
+</main>
+
+<script>
+  const WEBHOOK_URL = 'https://radektomas.app.n8n.cloud/webhook/darkomat-dotaznik';
+  const REQUIRED = ['q1','q2','q3','q4','q5','q6','q7','q8'];
+
+  // Pill visual toggle
+  document.querySelectorAll('.pills').forEach(container => {
+    const type = container.dataset.type;
+    container.querySelectorAll('.pill').forEach(pill => {
+      const input = pill.querySelector('input');
+      input.addEventListener('change', () => {
+        if (type === 'radio') {
+          container.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+          if (input.checked) pill.classList.add('selected');
+        } else {
+          pill.classList.toggle('selected', input.checked);
+        }
+        // Jiné toggle
+        const name = input.name;
+        if (input.value.startsWith('jine_')) {
+          const otherDiv = document.getElementById('other-' + name);
+          if (otherDiv) {
+            const show = type === 'radio' ? input.checked : input.checked;
+            otherDiv.style.display = show ? 'block' : 'none';
+          }
+        }
+        updateProgress();
+      });
+    });
+  });
+
+  function updateProgress() {
+    let count = 0;
+    REQUIRED.forEach(q => {
+      if (q === 'q4') {
+        if (document.querySelectorAll('input[name="q4"]:checked').length > 0) count++;
+      } else {
+        if (document.querySelector(`input[name="${q}"]:checked`)) count++;
+      }
+    });
+    const pct = Math.round(count / REQUIRED.length * 100);
+    document.getElementById('progress').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = count + ' z ' + REQUIRED.length + ' vyplněno';
+    document.getElementById('progress-pct').textContent = pct + ' %';
+  }
+
+  document.getElementById('survey-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const errEl = document.getElementById('global-error');
+    errEl.style.display = 'none';
+    const data = {};
+    let valid = true;
+
+    ['q1','q2','q3','q5','q6','q7','q8'].forEach(q => {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (!checked) { valid = false; return; }
+      data[q] = checked.value.startsWith('jine_')
+        ? (document.querySelector(`input[name="${q}_other"]`).value.trim() || 'Jiné')
+        : checked.value;
+    });
+
+    const q4checked = [...document.querySelectorAll('input[name="q4"]:checked')];
+    if (q4checked.length === 0) { valid = false; }
+    else {
+      data['q4'] = q4checked.map(cb => cb.value.startsWith('jine_')
+        ? (document.querySelector('input[name="q4_other"]').value.trim() || 'Jiné')
+        : cb.value);
+    }
+
+    if (!valid) {
+      errEl.style.display = 'block';
+      errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Odesílám…';
+
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      document.getElementById('survey-form').style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Odeslat odpovědi';
+      alert('Chyba při odesílání. Zkuste to prosím znovu.');
+    }
+  });
+</script>
+</body>
+</html>
